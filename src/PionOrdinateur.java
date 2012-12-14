@@ -1,6 +1,9 @@
 class PionOrdinateur extends Pion {
-	protected Class advs=PionJoueur.class;
-	PionOrdinateur(){}
+	protected Class advs = PionJoueur.class;
+
+	PionOrdinateur() {
+	}
+
 	PionOrdinateur(int i, int j) {
 		super(i, j);
 	}
@@ -10,10 +13,10 @@ class PionOrdinateur extends Pion {
 	}
 
 	public boolean reglePrise(Case arrivee) {
-		return reglePriseVersBas(advs,arrivee);
+		return reglePriseVersBas(advs, arrivee);
 	}
-	
-	public int[] cherchePrise(){
+
+	public int[] cherchePrise() {
 		return cherchePriseVersBas(advs);
 	}
 

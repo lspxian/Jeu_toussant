@@ -14,7 +14,6 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-
 public class Graphique {
 	public static void main(String[] args) {
 		DamierFrame frame = new DamierFrame();
@@ -37,9 +36,10 @@ class DamierPanel extends JPanel {
 	private ArrayList<Ellipse2D> pionsJaune;
 	private Ellipse2D unPion;
 	private Ellipse2D unPionOr;
-	private Jeu monJeu;
+	private Damier damier;
+
 	public DamierPanel() {
-		monJeu=new Jeu();
+		damier = new Damier();
 		unPion = null;
 		unPionOr = null;
 		// initialiser les pions dans une liste
@@ -75,29 +75,34 @@ class DamierPanel extends JPanel {
 		for (Ellipse2D e : pionsJaune)
 			if (e.contains(d))
 				return e;
-/*		for(Ellipse2D e:pionsRouge)
-			if(e.contains(d))
-				return e;*/
+		/*
+		 * for(Ellipse2D e:pionsRouge) if(e.contains(d)) return e;
+		 */
 		return null;
 	}
-	
-	public void miseAJour(){
-		List<Pion> haut=monJeu.getDamier().getPionOrdinateur();
-		List<Pion> bas=monJeu.getDamier().getPionJoueur();
+
+	public void miseAJour() {
+		List<Pion> haut = damier.getPionOrdinateur();
+		List<Pion> bas = damier.getPionJoueur();
 		pionsRouge = new ArrayList<Ellipse2D>();
 		pionsJaune = new ArrayList<Ellipse2D>();
-		for(Pion p: haut){
-			if(DameOrdinateur.class.isInstance(p))
-				//dame rayon=30
-				pionsRouge.add(new Ellipse2D.Double(p.getColonne()* 50, p.getLigne()* 50, 30, 30));
-			else //pion rayon=50
-				pionsRouge.add(new Ellipse2D.Double(p.getColonne()* 50, p.getLigne()* 50, 50, 50));
-		}
-		for(Pion p: bas){
-			if(DameJoueur.class.isInstance(p))
-				pionsJaune.add(new Ellipse2D.Double(p.getColonne()* 50, p.getLigne()* 50, 30, 30));
+		for (Pion p : haut) {
+			if (DameOrdinateur.class.isInstance(p))
+				// dame rayon=30
+				pionsRouge.add(new Ellipse2D.Double(p.getColonne() * 50, p
+						.getLigne() * 50, 30, 30));
 			else
-				pionsJaune.add(new Ellipse2D.Double(p.getColonne()* 50, p.getLigne()* 50, 50, 50));
+				// pion rayon=50
+				pionsRouge.add(new Ellipse2D.Double(p.getColonne() * 50, p
+						.getLigne() * 50, 50, 50));
+		}
+		for (Pion p : bas) {
+			if (DameJoueur.class.isInstance(p))
+				pionsJaune.add(new Ellipse2D.Double(p.getColonne() * 50, p
+						.getLigne() * 50, 30, 30));
+			else
+				pionsJaune.add(new Ellipse2D.Double(p.getColonne() * 50, p
+						.getLigne() * 50, 50, 50));
 		}
 	}
 
@@ -108,28 +113,30 @@ class DamierPanel extends JPanel {
 		}
 
 		public void mouseReleased(MouseEvent event) {
-			int x = ((int) event.getX() / 50) ;
-			int y = ((int) event.getY() / 50) ;
-			//arrivee cases[y][x]   depart cases[getx][gety]
-			//regle fait aussi la modification
-			if (unPion != null && monJeu.regles(y, x, (int)unPionOr.getY()/50, (int)unPionOr.getX()/50)) {
-				if(monJeu.gagnantHomme()){//
+			int x = ((int) event.getX() / 50);
+			int y = ((int) event.getY() / 50);
+			// arrivee cases[y][x] depart cases[getx][gety]
+			// regle fait aussi la modification
+			if (unPion != null
+					&& damier.regles(y, x, (int) unPionOr.getY() / 50,
+							(int) unPionOr.getX() / 50)) {
+				if (damier.gagnantHomme()) {//
 					miseAJour();
 					repaint();
 					event.consume();
 					System.out.println("Vous avez gagne");
-				}
-				else{
-					monJeu.jeuOrdinateur();
+				} else {
+					damier.jeuOrdinateur();
 					miseAJour();
 					repaint();
-					if(monJeu.gagnantOrdi()){
+					if (damier.gagnantOrdi()) {
 						event.consume();
 						System.out.println("Vous avez perdu");
 					}
 				}
 			} else {
-				unPion.setFrame(unPionOr.getX(), unPionOr.getY(), unPion.getWidth(), unPion.getHeight());
+				unPion.setFrame(unPionOr.getX(), unPionOr.getY(),
+						unPion.getWidth(), unPion.getHeight());
 				repaint();
 			}
 		}
@@ -140,7 +147,8 @@ class DamierPanel extends JPanel {
 			if (unPion != null) {
 				int x = arg0.getX();
 				int y = arg0.getY();
-				unPion.setFrame(x - 25, y - 25, unPion.getWidth(), unPion.getHeight());
+				unPion.setFrame(x - 25, y - 25, unPion.getWidth(),
+						unPion.getHeight());
 				repaint();
 			}
 		}
@@ -153,4 +161,3 @@ class DamierPanel extends JPanel {
 		}
 	}
 }
-
