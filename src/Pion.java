@@ -26,6 +26,8 @@ public abstract class Pion {
 	public abstract boolean regleDeplacement(Case c);
 
 	public abstract boolean reglePrise(Case c);
+	
+//	public int[] cherchePriseVersBas(Class c)
 }
 
 class PionJoueur extends Pion {

@@ -94,19 +94,25 @@ public class Damier {
 		return false;
 	}
 	
+	public int[] cherchePriseUneFois(Pion p,Class c){
+		int x=p.getLigne();
+		int y=p.getColonne();
+		int[] res;
+		res=priseSens(x,y,1,1,c);
+		if(res!=null) return res;
+		res=priseSens(x,y,-1,-1,c);
+		if(res!=null) return res;
+		res=priseSens(x,y,1,-1,c);
+		if(res!=null) return res;
+		res=priseSens(x,y,-1,1,c);
+		if(res!=null) return res;
+		return null;
+	}
+	
 	public int[] cherchePrise(ArrayList<Pion> pion1, Class c){
 		for(Pion p:pion1){
-			int x=p.getLigne();
-			int y=p.getColonne();
-			int[] res;
-			res=priseSens(x,y,1,1,c);
-			if(res!=null) return res;
-			res=priseSens(x,y,-1,-1,c);
-			if(res!=null) return res;
-			res=priseSens(x,y,1,-1,c);
-			if(res!=null) return res;
-			res=priseSens(x,y,-1,1,c);
-			if(res!=null) return res;
+			int[] a=cherchePriseUneFois(p, c);
+			if(a!=null) return a;
 		}
 		return null;
 	}
@@ -124,5 +130,16 @@ public class Damier {
 		}catch(ArrayIndexOutOfBoundsException e){}
 		return null;
 	}
+	
+	public void reprise(int[] a, Class c){
+		while(a!=null){
+			Case depart=cases[a[0]][a[1]];
+			Case arrivee=cases[a[2]][a[3]];
+			Case milieu=cases[(a[0]+a[2])/2][(a[1]+a[3])/2];
+			reglePrise(depart, arrivee, milieu);
+			a=cherchePriseUneFois(arrivee.getPion(), PionJoueur.class);
+		}
+	}
+
 
 }

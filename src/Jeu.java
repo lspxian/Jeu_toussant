@@ -10,9 +10,13 @@ public class Jeu {
 		Case depart = damier.getCases()[ligneDepa][colonneDepa];
 		Case arrivee = damier.getCases()[ligneArri][colonneArri];
 		Case milieu = damier.getCases()[(ligneDepa + ligneArri) / 2][(colonneDepa + colonneArri) / 2];
-		if (damier.cherchePrise(damier.getPionJoueur(), PionOrdinateur.class)!=null){
-			if(damier.reglePrise(depart, arrivee,milieu)) 
+		int[] a=damier.cherchePrise(damier.getPionJoueur(), PionOrdinateur.class);
+		if (a!=null){
+			if(damier.reglePrise(depart, arrivee,milieu)){
+				a=damier.cherchePriseUneFois(arrivee.getPion(), PionJoueur.class);
+				damier.reprise(a, PionOrdinateur.class);
 				return true;
+			}
 			else return false;
 		}
 		else if (damier.regleDeplacement(depart, arrivee)) 
@@ -20,13 +24,11 @@ public class Jeu {
 		return false;
 	}
 	
+	
 	public void jeuOrdinateur(){
 		int[] a=damier.cherchePrise(damier.getPionOrdinateur(), PionJoueur.class);
 		if(a!=null){
-			Case depart=damier.getCases()[a[0]][a[1]];
-			Case arrivee=damier.getCases()[a[2]][a[3]];
-			Case milieu=damier.getCases()[(a[0]+a[2])/2][(a[1]+a[3])/2];
-			damier.reglePrise(depart, arrivee, milieu);
+			damier.reprise(a,PionJoueur.class);
 		}
 		else damier.deplacementAleatoire();
 }
