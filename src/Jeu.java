@@ -13,7 +13,7 @@ public class Jeu {
 		int[] a=damier.cherchePrise(damier.getPionJoueur(), PionOrdinateur.class);
 		if (a!=null){
 			if(damier.reglePrise(depart, arrivee,milieu)){
-				a=damier.cherchePriseUneFois(arrivee.getPion(), PionJoueur.class);
+				a=arrivee.getPion().cherchePrise();
 				damier.reprise(a, PionOrdinateur.class);
 				return true;
 			}

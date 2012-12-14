@@ -93,31 +93,16 @@ public class Damier {
 		}
 		return false;
 	}
-	
-	public int[] cherchePriseUneFois(Pion p,Class c){
-		int x=p.getLigne();
-		int y=p.getColonne();
-		int[] res;
-		res=priseSens(x,y,1,1,c);
-		if(res!=null) return res;
-		res=priseSens(x,y,-1,-1,c);
-		if(res!=null) return res;
-		res=priseSens(x,y,1,-1,c);
-		if(res!=null) return res;
-		res=priseSens(x,y,-1,1,c);
-		if(res!=null) return res;
-		return null;
-	}
-	
+		
 	public int[] cherchePrise(ArrayList<Pion> pion1, Class c){
 		for(Pion p:pion1){
-			int[] a=cherchePriseUneFois(p, c);
+			int[] a=p.cherchePrise();
 			if(a!=null) return a;
 		}
 		return null;
 	}
 	
-	public int[] priseSens(int x, int y, int i, int j, Class c){
+	public static int[] priseSens(int x, int y, int i, int j, Class c){
 		int[] a=new int[4];
 		try{
 			if(c.isInstance(cases[x+i][y+j].getPion())&&cases[x+2*i][y+2*j].getPion()==null){
@@ -137,9 +122,11 @@ public class Damier {
 			Case arrivee=cases[a[2]][a[3]];
 			Case milieu=cases[(a[0]+a[2])/2][(a[1]+a[3])/2];
 			reglePrise(depart, arrivee, milieu);
-			a=cherchePriseUneFois(arrivee.getPion(), PionJoueur.class);
+			a=arrivee.getPion().cherchePrise();
 		}
 	}
 
-
+	public static boolean isPionC(int x, int y, Class c){
+		return c.isInstance(cases[x][y].getPion());
+	}
 }

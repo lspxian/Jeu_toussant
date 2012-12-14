@@ -35,7 +35,6 @@ public class Case {
 		this.colonne = colonne;
 	}
 
-	
 }
 
 
