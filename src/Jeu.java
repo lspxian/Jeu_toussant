@@ -36,4 +36,17 @@ public class Jeu {
 	public Damier getDamier() {
 		return damier;
 	}
+
+	public boolean gagnantHomme() {
+		if(damier.finDuJeu(damier.getPionOrdinateur()))
+			return true;
+		return false;
+	}
+
+	public boolean gagnantOrdi() {
+		if(damier.finDuJeu(damier.getPionJoueur()))
+			return true;
+		return false;
+	}
+
 }

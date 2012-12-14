@@ -113,9 +113,21 @@ class DamierPanel extends JPanel {
 			int y = ((int) event.getY() / 50) ;
 			//arrivee case[y][x]   depart[getx][gety]
 			if (unPion != null && monJeu.regles(y, x, (int)unPionOr.getY()/50, (int)unPionOr.getX()/50)) {
-				monJeu.jeuOrdinateur();
-				miseAJour();
-				repaint();
+				if(monJeu.gagnantHomme()){
+					miseAJour();
+					repaint();
+					event.consume();
+					System.out.println("Vous avez gagne");
+				}
+				else{
+					monJeu.jeuOrdinateur();
+					miseAJour();
+					repaint();
+					if(monJeu.gagnantOrdi()){
+						event.consume();
+						System.out.println("Vous avez perdu");
+					}
+				}
 			} else {
 				unPion.setFrame(unPionOr.getX(), unPionOr.getY(), unPion.getWidth(), unPion.getHeight());
 				repaint();

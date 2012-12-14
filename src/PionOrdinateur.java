@@ -16,4 +16,8 @@ class PionOrdinateur extends Pion {
 	public int[] cherchePrise(){
 		return cherchePriseVersBas(advs);
 	}
+
+	public boolean chercheDeplace() {
+		return chercheDeplaceVersBas();
+	}
 }

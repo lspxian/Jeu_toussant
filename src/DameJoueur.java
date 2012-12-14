@@ -17,4 +17,8 @@ class DameJoueur extends PionJoueur {
 		if(a!=null) return a;
 		else return cherchePriseVersBas(advs);
 	}
+	
+	public boolean chercheDeplace(){
+		return chercheDeplaceVersBas()||chercheDeplaceVersHaut();
+	}
 }

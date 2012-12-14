@@ -25,6 +25,8 @@ public abstract class Pion {
 	
 	public abstract int[] cherchePrise();
 	
+	public abstract boolean chercheDeplace() ;
+	
 	public int[] cherchePriseVersBas(Class c){
 		int[] res;
 		res=Damier.priseSens(ligne,colonne,1,1,c);
@@ -41,6 +43,13 @@ public abstract class Pion {
 		if(res!=null) return res;
 		return null;
 	}
+	
+	public boolean chercheDeplaceVersBas(){
+		return Damier.deplaceSens(ligne, colonne, 1, 1)||Damier.deplaceSens(ligne, colonne, 1, -1);
+	}
+	public boolean chercheDeplaceVersHaut(){
+		return Damier.deplaceSens(ligne, colonne, -1, 1)||Damier.deplaceSens(ligne, colonne, -1, -1);
+	}	
 	
 	public boolean regleDeplaceVersBas(Case arrivee){
 		int vertical =arrivee.getLigne()-this.ligne;

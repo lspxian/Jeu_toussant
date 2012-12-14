@@ -17,4 +17,8 @@ class DameOrdinateur extends PionOrdinateur {
 		if(a!=null) return a;
 		else return cherchePriseVersHaut(advs);
 	}
+	
+	public boolean chercheDeplace(){
+		return chercheDeplaceVersBas()||chercheDeplaceVersHaut();
+	}
 }

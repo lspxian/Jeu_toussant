@@ -51,7 +51,7 @@ public class Damier {
 		p.setLigne(a.getLigne());
 		p.setColonne(a.getColonne());
 		d.setPion(a.getPion());
-		if(a.getLigne()==5){
+		if(a.getLigne()==0){
 			Pion dame=new DameJoueur(p);
 			a.setPion(dame);
 			pionJoueur.set(pionJoueur.indexOf(p), dame);
@@ -90,19 +90,23 @@ public class Damier {
 		return pionJoueur;
 	}
 	
-	public boolean finDuJeu(){
-		if(pionOrdinateur.size()==0)
+	public boolean finDuJeu(ArrayList<Pion> pions){
+		if(pions.size()==0)
 			return true;
-		else{
-			for(Pion p: pionOrdinateur){
-/*				try{
-					cases[];
-				}catch();*/
-			}
-		}
+		else
+			if(cherchePrise(pions)==null&&!chercheDeplace(pions))
+				return true;
 		return false;
 	}
 		
+	private boolean chercheDeplace(ArrayList<Pion> pions) {
+		for(Pion p:pions){
+			if(p.chercheDeplace())
+				return true;
+		}
+		return false;
+	}
+
 	public int[] cherchePrise(ArrayList<Pion> pions){
 		for(Pion p:pions){
 			int[] a=p.cherchePrise();
@@ -123,6 +127,14 @@ public class Damier {
 			}				
 		}catch(ArrayIndexOutOfBoundsException e){}
 		return null;
+	}
+	
+	public static boolean deplaceSens(int x, int y, int i, int j){
+		try{
+			if(cases[x+i][y+j].getPion()==null)
+				return true;
+		}catch(ArrayIndexOutOfBoundsException e){}
+		return false;
 	}
 	
 	public void reprise(int[] a, Class c){

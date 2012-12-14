@@ -16,4 +16,8 @@ class PionJoueur extends Pion {
 	public int[] cherchePrise(){
 		return cherchePriseVersHaut(advs);
 	}
+
+	public boolean chercheDeplace() {
+		return chercheDeplaceVersHaut();
+	}
 }
