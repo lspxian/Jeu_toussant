@@ -1,44 +1,42 @@
 import java.util.ArrayList;
+import java.util.List;
 
 //
 public class Damier {
 	private static final int TAILLE = 10;
 	private static Case[][] cases = new Case[TAILLE][TAILLE];
-	private ArrayList<Pion> pionOrdinateur=new ArrayList<Pion>();
-	private ArrayList<Pion> pionJoueur=new ArrayList<Pion>();
+	private List<Pion> pionOrdinateur=new ArrayList<Pion>();
+	private List<Pion> pionJoueur=new ArrayList<Pion>();
 
 	Damier() {
 		for (int i = 0; i < TAILLE; i++) 
 			for (int j = 0; j < TAILLE; j++){
-				Damier.cases[i][j] = new Case(i, j); //initialisation de chaque case
-				Pion p = Damier.cases[i][j].getPion();
+				cases[i][j] = new Case(i, j); 
+				//initialisation de chaque case, les Pions sont fabriqué dans Case()
+				Pion p = cases[i][j].getPion();
 				if (p instanceof PionJoueur)
-					this.pionJoueur.add((PionJoueur) p);
+					this.pionJoueur.add(p);//add Pion dans la liste
 				else if (p instanceof PionOrdinateur)
-					this.pionOrdinateur.add((PionOrdinateur) p);
+					this.pionOrdinateur.add(p);
 			}
 	}
 
-	public static Case[][] getCases() {
+	public Case[][] getCases() {
 		return cases;
-	}
-
-	public static void setCases(Case[][] cases) {
-		Damier.cases = cases;
 	}
 
 	public boolean regleDeplacement(Case depart, Case arrivee) {
 		if(depart.getPion().regleDeplacement(arrivee)){
-			echangeDesPions(depart, arrivee);
+			echangeDesPions(depart, arrivee);//pion-espace
 			return true;
 		}
 		return false;
 	}
-
+//regle et modification
 	public boolean reglePrise(Case depart, Case arrivee,Case milieu) {
 		if(depart.getPion().reglePrise(arrivee)){
-			echangeDesPions(depart, arrivee);
-			pionOrdinateur.remove(milieu.getPion());
+			echangeDesPions(depart, arrivee);//pion-espace
+			pionOrdinateur.remove(milieu.getPion()); //supprimer le pion
 			pionJoueur.remove(milieu.getPion());
 			milieu.setPion(null);
 			return true;
@@ -47,21 +45,22 @@ public class Damier {
 	}
 	
 	public void echangeDesPions(Case d, Case a) {
-		Pion p = d.getPion();
+		Pion p = d.getPion();//changement d'un pion et d'un espace
 		p.setLigne(a.getLigne());
 		p.setColonne(a.getColonne());
 		d.setPion(a.getPion());
-		if(a.getLigne()==0){
+		//un pion devient un dame
+		if(a.getLigne()==0&&p instanceof PionJoueur){
 			Pion dame=new DameJoueur(p);
 			a.setPion(dame);
 			pionJoueur.set(pionJoueur.indexOf(p), dame);
 		}
-		else if(a.getLigne()==TAILLE){
+		else if(a.getLigne()==TAILLE&&p instanceof PionOrdinateur){
 			Pion dame=new DameOrdinateur(p);
 			a.setPion(dame);
 			pionOrdinateur.set(pionOrdinateur.indexOf(p), dame);
 		}
-		else a.setPion(p);
+		else a.setPion(p);//pas de changement de dame
 	}
 
 	public void deplacementAleatoire() {
@@ -72,49 +71,58 @@ public class Damier {
 			int num=(int)(Math.random()*pionOrdinateur.size());
 			Pion p=pionOrdinateur.get(num);
 			double direction=Math.random();
-			depart=Damier.cases[p.getLigne()][p.getColonne()];
+			depart=cases[p.getLigne()][p.getColonne()];
 			try{
 			if(direction<0.5)
-				arrivee=Damier.cases[p.getLigne()+1][p.getColonne()-1];
-			else	arrivee=Damier.cases[p.getLigne()+1][p.getColonne()+1];
+				arrivee=cases[p.getLigne()+1][p.getColonne()-1];
+			else	arrivee=cases[p.getLigne()+1][p.getColonne()+1];
 			etat=this.regleDeplacement(depart, arrivee);
 			}catch(ArrayIndexOutOfBoundsException e){}
 		}
 	}
 
-	public ArrayList<Pion> getPionOrdinateur() {
+	public List<Pion> getPionOrdinateur() {
 		return pionOrdinateur;
 	}
 
-	public ArrayList<Pion> getPionJoueur() {
+	public List<Pion> getPionJoueur() {
 		return pionJoueur;
 	}
 	
-	public boolean finDuJeu(ArrayList<Pion> pions){
-		if(pions.size()==0)
+	public boolean finDuJeu(List<Pion> pions){
+		if(pions.size()==0) return true;//il y a plus de pion
+		//tous les pions sont bloqués
+		else	if(cherchePrise(pions)==null&&!chercheDeplace(pions))
 			return true;
-		else
-			if(cherchePrise(pions)==null&&!chercheDeplace(pions))
-				return true;
 		return false;
 	}
-		
-	private boolean chercheDeplace(ArrayList<Pion> pions) {
+		//chercher un deplacement
+	private boolean chercheDeplace(List<Pion> pions) {
 		for(Pion p:pions){
 			if(p.chercheDeplace())
-				return true;
+				return true;//trouver un, c bon
 		}
 		return false;
 	}
-
-	public int[] cherchePrise(ArrayList<Pion> pions){
+		//chercher une prise pour tous les pions
+	public int[] cherchePrise(List<Pion> pions){
 		for(Pion p:pions){
 			int[] a=p.cherchePrise();
 			if(a!=null) return a;
 		}
 		return null;
 	}
-	
+		//faire la prise et la reprise
+	public void reprise(int[] a, Class c){
+		while(a!=null){
+			Case depart=cases[a[0]][a[1]];
+			Case arrivee=cases[a[2]][a[3]];
+			Case milieu=cases[(a[0]+a[2])/2][(a[1]+a[3])/2];
+			reglePrise(depart, arrivee, milieu);
+			a=arrivee.getPion().cherchePrise();
+		}
+	}
+		//chercher la prise dans un des quatre sens, c pion d'adversaire
 	public static int[] priseSens(int x, int y, int i, int j, Class c){
 		int[] a=new int[4];
 		try{
@@ -128,7 +136,7 @@ public class Damier {
 		}catch(ArrayIndexOutOfBoundsException e){}
 		return null;
 	}
-	
+		//chercher la deplacement dans un des quatre sens
 	public static boolean deplaceSens(int x, int y, int i, int j){
 		try{
 			if(cases[x+i][y+j].getPion()==null)
@@ -136,20 +144,10 @@ public class Damier {
 		}catch(ArrayIndexOutOfBoundsException e){}
 		return false;
 	}
-	
-	public void reprise(int[] a, Class c){
-		while(a!=null){
-			Case depart=cases[a[0]][a[1]];
-			Case arrivee=cases[a[2]][a[3]];
-			Case milieu=cases[(a[0]+a[2])/2][(a[1]+a[3])/2];
-			reglePrise(depart, arrivee, milieu);
-			a=arrivee.getPion().cherchePrise();
-		}
-	}
-
+		//le pion de case(x)(y) est un pion de type c
 	public static boolean isPionC(int x, int y, Class c){
 		Pion p=cases[x][y].getPion();
-		if(p!=null)
+		if(p!=null)//le pion existe et comparer les Class
 			return p.getClass().equals(c)||p.getClass().getSuperclass().equals(c);
 		return false;
 		//return c.isInstance(cases[x][y].getPion());

@@ -20,7 +20,6 @@ public class Graphique {
 		DamierFrame frame = new DamierFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		System.out.println("hoho");
 	}
 }
 
@@ -50,7 +49,6 @@ class DamierPanel extends JPanel {
 	}
 
 	public void paintComponent(Graphics g) {
-		//super.paintComponent(g);
 		Graphics2D go = (Graphics2D) g;
 		// le damier
 		for (int i = 0; i < 10; i++) {
@@ -84,14 +82,15 @@ class DamierPanel extends JPanel {
 	}
 	
 	public void miseAJour(){
-		ArrayList<Pion> haut=monJeu.getDamier().getPionOrdinateur();
-		ArrayList<Pion> bas=monJeu.getDamier().getPionJoueur();
+		List<Pion> haut=monJeu.getDamier().getPionOrdinateur();
+		List<Pion> bas=monJeu.getDamier().getPionJoueur();
 		pionsRouge = new ArrayList<Ellipse2D>();
 		pionsJaune = new ArrayList<Ellipse2D>();
 		for(Pion p: haut){
 			if(DameOrdinateur.class.isInstance(p))
+				//dame rayon=30
 				pionsRouge.add(new Ellipse2D.Double(p.getColonne()* 50, p.getLigne()* 50, 30, 30));
-			else 
+			else //pion rayon=50
 				pionsRouge.add(new Ellipse2D.Double(p.getColonne()* 50, p.getLigne()* 50, 50, 50));
 		}
 		for(Pion p: bas){
@@ -111,9 +110,10 @@ class DamierPanel extends JPanel {
 		public void mouseReleased(MouseEvent event) {
 			int x = ((int) event.getX() / 50) ;
 			int y = ((int) event.getY() / 50) ;
-			//arrivee case[y][x]   depart[getx][gety]
+			//arrivee cases[y][x]   depart cases[getx][gety]
+			//regle fait aussi la modification
 			if (unPion != null && monJeu.regles(y, x, (int)unPionOr.getY()/50, (int)unPionOr.getX()/50)) {
-				if(monJeu.gagnantHomme()){
+				if(monJeu.gagnantHomme()){//
 					miseAJour();
 					repaint();
 					event.consume();
