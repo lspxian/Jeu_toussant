@@ -13,6 +13,7 @@ public abstract class Pion {
 	public int getColonne() {
 		return colonne;
 	}
+	Pion(){}
 	Pion(int i, int j) {
 		ligne = i;
 		colonne = j;
@@ -42,7 +43,7 @@ public abstract class Pion {
 	}
 	
 	public boolean regleDeplaceVersBas(Case arrivee){
-		int vertical =arrivee.getLigne()-this.ligne;	
+		int vertical =arrivee.getLigne()-this.ligne;
 		int horizontal = arrivee.getColonne()-this.colonne;
 		if (vertical == 1 && Math.abs(horizontal) == 1 && arrivee.getPion() == null)
 			return true;

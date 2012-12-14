@@ -1,6 +1,7 @@
-class DameJoueur extends PionOrdinateur {
-	DameJoueur(int i, int j) {
-		super(i, j);
+class DameJoueur extends PionJoueur {
+	DameJoueur(Pion p) {
+		this.ligne=p.getLigne();
+		this.colonne=p.getColonne();
 	}
 
 	public boolean regleDeplacement(Case arrivee) {
@@ -13,7 +14,7 @@ class DameJoueur extends PionOrdinateur {
 	
 	public int[] cherchePrise(){
 		int[] a=super.cherchePrise();
-		if(a==null) return a;
+		if(a!=null) return a;
 		else return cherchePriseVersBas(advs);
 	}
 }

@@ -88,10 +88,18 @@ class DamierPanel extends JPanel {
 		ArrayList<Pion> bas=monJeu.getDamier().getPionJoueur();
 		pionsRouge = new ArrayList<Ellipse2D>();
 		pionsJaune = new ArrayList<Ellipse2D>();
-		for(Pion p: haut)
-			pionsRouge.add(new Ellipse2D.Double(p.getColonne()* 50, p.getLigne()* 50, 50, 50));
-		for(Pion p: bas)
-			pionsJaune.add(new Ellipse2D.Double(p.getColonne()* 50, p.getLigne()* 50, 50, 50));
+		for(Pion p: haut){
+			if(DameOrdinateur.class.isInstance(p))
+				pionsRouge.add(new Ellipse2D.Double(p.getColonne()* 50, p.getLigne()* 50, 30, 30));
+			else 
+				pionsRouge.add(new Ellipse2D.Double(p.getColonne()* 50, p.getLigne()* 50, 50, 50));
+		}
+		for(Pion p: bas){
+			if(DameJoueur.class.isInstance(p))
+				pionsJaune.add(new Ellipse2D.Double(p.getColonne()* 50, p.getLigne()* 50, 30, 30));
+			else
+				pionsJaune.add(new Ellipse2D.Double(p.getColonne()* 50, p.getLigne()* 50, 50, 50));
+		}
 	}
 
 	private class MouseHandler extends MouseAdapter {
@@ -108,9 +116,8 @@ class DamierPanel extends JPanel {
 				monJeu.jeuOrdinateur();
 				miseAJour();
 				repaint();
-				
 			} else {
-				unPion.setFrame(unPionOr.getX(), unPionOr.getY(), 50, 50);
+				unPion.setFrame(unPionOr.getX(), unPionOr.getY(), unPion.getWidth(), unPion.getHeight());
 				repaint();
 			}
 		}
@@ -121,7 +128,7 @@ class DamierPanel extends JPanel {
 			if (unPion != null) {
 				int x = arg0.getX();
 				int y = arg0.getY();
-				unPion.setFrame(x - 25, y - 25, 50, 50);
+				unPion.setFrame(x - 25, y - 25, unPion.getWidth(), unPion.getHeight());
 				repaint();
 			}
 		}

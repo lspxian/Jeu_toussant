@@ -10,7 +10,7 @@ public class Jeu {
 		Case depart = damier.getCases()[ligneDepa][colonneDepa];
 		Case arrivee = damier.getCases()[ligneArri][colonneArri];
 		Case milieu = damier.getCases()[(ligneDepa + ligneArri) / 2][(colonneDepa + colonneArri) / 2];
-		int[] a=damier.cherchePrise(damier.getPionJoueur(), PionOrdinateur.class);
+		int[] a=damier.cherchePrise(damier.getPionJoueur());
 		if (a!=null){
 			if(damier.reglePrise(depart, arrivee,milieu)){
 				a=arrivee.getPion().cherchePrise();
@@ -26,7 +26,7 @@ public class Jeu {
 	
 	
 	public void jeuOrdinateur(){
-		int[] a=damier.cherchePrise(damier.getPionOrdinateur(), PionJoueur.class);
+		int[] a=damier.cherchePrise(damier.getPionOrdinateur());
 		if(a!=null){
 			damier.reprise(a,PionJoueur.class);
 		}

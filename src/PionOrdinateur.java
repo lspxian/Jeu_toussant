@@ -1,5 +1,6 @@
 class PionOrdinateur extends Pion {
 	protected Class advs=PionJoueur.class;
+	PionOrdinateur(){}
 	PionOrdinateur(int i, int j) {
 		super(i, j);
 	}

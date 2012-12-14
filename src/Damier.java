@@ -17,7 +17,6 @@ public class Damier {
 				else if (p instanceof PionOrdinateur)
 					this.pionOrdinateur.add((PionOrdinateur) p);
 			}
-		System.out.println();
 	}
 
 	public static Case[][] getCases() {
@@ -52,7 +51,17 @@ public class Damier {
 		p.setLigne(a.getLigne());
 		p.setColonne(a.getColonne());
 		d.setPion(a.getPion());
-		a.setPion(p);
+		if(a.getLigne()==5){
+			Pion dame=new DameJoueur(p);
+			a.setPion(dame);
+			pionJoueur.set(pionJoueur.indexOf(p), dame);
+		}
+		else if(a.getLigne()==TAILLE){
+			Pion dame=new DameOrdinateur(p);
+			a.setPion(dame);
+			pionOrdinateur.set(pionOrdinateur.indexOf(p), dame);
+		}
+		else a.setPion(p);
 	}
 
 	public void deplacementAleatoire() {
@@ -94,8 +103,8 @@ public class Damier {
 		return false;
 	}
 		
-	public int[] cherchePrise(ArrayList<Pion> pion1, Class c){
-		for(Pion p:pion1){
+	public int[] cherchePrise(ArrayList<Pion> pions){
+		for(Pion p:pions){
 			int[] a=p.cherchePrise();
 			if(a!=null) return a;
 		}
@@ -105,7 +114,7 @@ public class Damier {
 	public static int[] priseSens(int x, int y, int i, int j, Class c){
 		int[] a=new int[4];
 		try{
-			if(c.isInstance(cases[x+i][y+j].getPion())&&cases[x+2*i][y+2*j].getPion()==null){
+			if(isPionC(x+i,y+j,c)&&cases[x+2*i][y+2*j].getPion()==null){
 				a[0]=x;
 				a[1]=y;
 				a[2]=x+2*i;
@@ -127,6 +136,10 @@ public class Damier {
 	}
 
 	public static boolean isPionC(int x, int y, Class c){
-		return c.isInstance(cases[x][y].getPion());
+		Pion p=cases[x][y].getPion();
+		if(p!=null)
+			return p.getClass().equals(c)||p.getClass().getSuperclass().equals(c);
+		return false;
+		//return c.isInstance(cases[x][y].getPion());
 	}
 }
