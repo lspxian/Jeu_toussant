@@ -93,4 +93,36 @@ public class Damier {
 		}
 		return false;
 	}
+	
+	public int[] cherchePrise(ArrayList<Pion> pion1, Class c){
+		for(Pion p:pion1){
+			int x=p.getLigne();
+			int y=p.getColonne();
+			int[] res;
+			res=priseSens(x,y,1,1,c);
+			if(res!=null) return res;
+			res=priseSens(x,y,-1,-1,c);
+			if(res!=null) return res;
+			res=priseSens(x,y,1,-1,c);
+			if(res!=null) return res;
+			res=priseSens(x,y,-1,1,c);
+			if(res!=null) return res;
+		}
+		return null;
+	}
+	
+	public int[] priseSens(int x, int y, int i, int j, Class c){
+		int[] a=new int[4];
+		try{
+			if(c.isInstance(cases[x+i][y+j].getPion())&&cases[x+2*i][y+2*j].getPion()==null){
+				a[0]=x;
+				a[1]=y;
+				a[2]=x+2*i;
+				a[3]=y+2*j;
+				return a;
+			}				
+		}catch(ArrayIndexOutOfBoundsException e){}
+		return null;
+	}
+
 }
